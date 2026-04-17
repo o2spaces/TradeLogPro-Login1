@@ -502,7 +502,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
 
 /* ─── AUTH OVERLAY ───────────────────────── */
 #authOverlay{position:fixed;inset:0;background:var(--bg-primary);z-index:9999;display:flex;align-items:center;justify-content:center;}
-.auth-card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:36px 30px;width:340px;max-width:92vw;box-shadow:0 12px 48px rgba(0,0,0,.7);}
+.auth-card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:36px 30px;width:360px;max-width:92vw;box-shadow:0 12px 48px rgba(0,0,0,.7);}
 .auth-logo-img{width:58px;height:58px;border-radius:12px;object-fit:cover;display:block;margin:0 auto 12px;}
 .auth-title{font-size:17px;font-weight:700;color:var(--text-primary);text-align:center;margin-bottom:3px;}
 .auth-sub{font-size:11px;color:var(--text-muted);text-align:center;margin-bottom:22px;}
@@ -515,6 +515,19 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
 .auth-btn:disabled{opacity:.55;cursor:not-allowed;}
 .auth-err{background:rgba(255,77,106,.08);border:1px solid rgba(255,77,106,.35);border-radius:6px;padding:8px 11px;font-size:11px;color:var(--red);margin-bottom:12px;display:none;line-height:1.5;}
 .auth-no-url{text-align:center;padding:10px 0 0;font-size:11px;color:var(--amber);}
+.auth-divider{display:flex;align-items:center;gap:10px;margin:14px 0;}
+.auth-divider-line{flex:1;height:1px;background:var(--border);}
+.auth-divider-text{font-size:10px;color:var(--text-muted);white-space:nowrap;}
+.auth-google-btn{width:100%;background:#fff;color:#3c4043;border:1px solid #dadce0;padding:9px 10px;border-radius:var(--radius-sm);font-size:13px;font-weight:500;cursor:pointer;font-family:var(--font-main);transition:box-shadow .15s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.auth-google-btn:hover{box-shadow:0 1px 6px rgba(0,0,0,.3);}
+/* ─── SETUP SHEET URL OVERLAY ─── */
+#setupSheetOverlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:10000;display:none;align-items:center;justify-content:center;}
+#setupSheetOverlay.open{display:flex;}
+.setup-sheet-card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:30px;width:440px;max-width:94vw;box-shadow:0 12px 48px rgba(0,0,0,.8);}
+.setup-sheet-title{font-size:15px;font-weight:700;margin-bottom:6px;}
+.setup-sheet-sub{font-size:11px;color:var(--text-muted);margin-bottom:16px;line-height:1.8;}
+.setup-sheet-steps{background:var(--bg-secondary);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:16px;font-size:11px;color:var(--text-secondary);line-height:2;}
+.setup-sheet-skip{background:none;border:none;color:var(--text-muted);font-size:11px;cursor:pointer;font-family:var(--font-main);text-decoration:underline;margin-top:10px;display:block;text-align:center;width:100%;}
 /* ─── TOPBAR USER CHIP ───────────────────── */
 .user-chip{display:flex;align-items:center;gap:5px;background:var(--bg-input);border:1px solid var(--border);border-radius:20px;padding:3px 10px 3px 5px;font-size:11px;}
 .user-avatar{width:20px;height:20px;border-radius:50%;background:var(--accent);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
@@ -541,6 +554,9 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
 <!-- config.js โหลดก่อนทุกอย่าง — admin แก้ไขที่ไฟล์นั้น -->
 <script src="config.js"></script>
 
+<!-- Google Identity Services -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+
 <!-- ─── LOGIN OVERLAY ──────────────────────────────── -->
 <div id="authOverlay">
   <div class="auth-card">
@@ -549,6 +565,21 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
     <div class="auth-sub">กรุณาเข้าสู่ระบบเพื่อใช้งาน</div>
     <div id="authErr" class="auth-err"></div>
     <div id="authNoUrl" class="auth-no-url" style="display:none;">⚠️ ระบบยังไม่ได้ตั้งค่า กรุณาติดต่อ Admin</div>
+
+    <!-- Google Sign-In Button -->
+    <div id="googleSignInWrap" style="margin-bottom:4px;">
+      <button class="auth-google-btn" onclick="authGoogleSignIn()">
+        <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.706A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.706V4.962H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.038l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.962L3.964 7.294C4.672 5.163 6.656 3.58 9 3.58z"/></svg>
+        เข้าสู่ระบบด้วย Google
+      </button>
+    </div>
+
+    <div class="auth-divider">
+      <div class="auth-divider-line"></div>
+      <div class="auth-divider-text">หรือ</div>
+      <div class="auth-divider-line"></div>
+    </div>
+
     <div class="auth-field">
       <div class="auth-label">Username</div>
       <input class="auth-input" id="authUser" placeholder="ชื่อผู้ใช้" autocomplete="username"
@@ -560,6 +591,39 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
         onkeydown="if(event.key==='Enter')authDoLogin()">
     </div>
     <button class="auth-btn" id="authBtn" onclick="authDoLogin()">🔐 เข้าสู่ระบบ</button>
+  </div>
+</div>
+
+<!-- ─── SETUP SHEET URL OVERLAY (แสดงหลัง login ถ้า scriptUrl ว่าง) ── -->
+<div id="setupSheetOverlay">
+  <div class="setup-sheet-card">
+    <div style="font-size:24px;margin-bottom:10px;">🔗</div>
+    <div class="setup-sheet-title">เชื่อมต่อ Google Sheet ของคุณ</div>
+    <div class="setup-sheet-sub">
+      เพื่อ Sync ข้อมูลการเทรดระหว่างอุปกรณ์ กรุณาใส่ Script URL ของ Google Sheet ของคุณ<br>
+      <span style="color:var(--accent);">ข้อมูลเก็บใน Sheet ของคุณเอง — ผู้ดูแลระบบไม่สามารถเข้าถึงได้</span>
+    </div>
+    <div class="setup-sheet-steps">
+      <b>วิธีได้ Script URL:</b><br>
+      1. เปิด <a href="https://sheets.new" target="_blank" style="color:var(--teal);">sheets.new</a> → สร้าง Google Sheet ใหม่<br>
+      2. Extensions → Apps Script → วาง GAS Code (จากเมนู ⚙ → ❓ Help → ② Apps Script)<br>
+      3. Deploy → New Deployment → Web App → Execute as: Me · Anyone<br>
+      4. Copy URL ที่ได้ → วางในช่องด้านล่าง
+    </div>
+    <div id="setupSheetErr" style="background:rgba(255,77,106,.08);border:1px solid rgba(255,77,106,.3);border-radius:6px;padding:7px 10px;font-size:11px;color:var(--red);margin-bottom:10px;display:none;"></div>
+    <div class="auth-label" style="margin-bottom:5px;">Google Apps Script URL</div>
+    <input class="auth-input" id="setupSheetUrl"
+      placeholder="https://script.google.com/macros/s/.../exec"
+      onkeydown="if(event.key==='Enter')setupSheetSave()">
+    <div style="display:flex;gap:8px;margin-top:12px;">
+      <button class="auth-btn" id="setupSheetBtn" onclick="setupSheetSave()" style="flex:1;margin-top:0;">
+        ✅ บันทึกและเชื่อมต่อ
+      </button>
+      <button onclick="setupSheetTest()" style="background:var(--bg-secondary);border:1px solid var(--border);color:var(--text-secondary);border-radius:var(--radius-sm);padding:0 14px;font-size:12px;cursor:pointer;font-family:var(--font-main);white-space:nowrap;">
+        🔗 ทดสอบ
+      </button>
+    </div>
+    <button class="setup-sheet-skip" onclick="setupSheetSkip()">ข้ามก่อน — ใช้แบบ Local เท่านั้น</button>
   </div>
 </div>
 
@@ -605,6 +669,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
           <div class="drop-item" onclick="openShareDashboard();closeMenu()">🔗 Share Dashboard</div>
           <div class="drop-item" onclick="closeMenu();setTimeout(openFeesConfig,80)">💰 Fees &amp; Commission</div>
           <div class="drop-item" onclick="openSheet();closeMenu()">🔗 Google Sheet URL</div>
+          <div class="drop-item" id="menuSetupSheet" onclick="openSetupSheetFromMenu();closeMenu()" style="display:none;">🔗 ตั้งค่า Sheet URL ของฉัน</div>
           <div class="drop-item" onclick="openM('mHelp');closeMenu()">❓ Help & Tutorials</div>
         </div>
       </div>
@@ -2921,8 +2986,12 @@ function init(){
   try{
     S.sessions=JSON.parse(localStorage.getItem('tj_s')||'{}');
     S.trades=JSON.parse(localStorage.getItem('tj_t')||'{}');
-    S.scriptUrl=localStorage.getItem('tj_url')||'';
-    if(_authSession && _authSession.scriptUrl){ S.scriptUrl=_authSession.scriptUrl; } // session override
+    // Priority: session.scriptUrl > localStorage tj_url
+    var localUrl = localStorage.getItem('tj_url') || '';
+    var sessionUrl = (_authSession && _authSession.scriptUrl) ? _authSession.scriptUrl : '';
+    S.scriptUrl = sessionUrl || localUrl;
+    // ถ้า session มี scriptUrl แต่ localStorage ไม่มี → sync ลง localStorage
+    if(sessionUrl && !localUrl){ localStorage.setItem('tj_url', sessionUrl); }
     S.keys=JSON.parse(localStorage.getItem('tj_k')||'{}');
     S.prov=localStorage.getItem('tj_p')||'gemini';
     S.provBackup=localStorage.getItem('tj_pb')||'groq';
@@ -2934,7 +3003,7 @@ function init(){
     S.sessions=getPortSessions();
     S.trades=getPortTrades();
     renderPortfolioBar(); // แสดง local ports ก่อน
-    // Sync เฉพาะเมื่อมี session (login แล้ว) หรือไม่ได้ใช้ auth system
+    // Sync เมื่อมี scriptUrl และมี session (login แล้ว) หรือไม่ได้ใช้ auth system
     var hasAuth = (typeof window.AUTH_GAS_URL !== 'undefined') && window.AUTH_GAS_URL;
     if(S.scriptUrl && (_authSession || !hasAuth)){ setConn(true); syncFromSheet(); }
     updateBadge();
@@ -11303,14 +11372,14 @@ async function _sha256(str){
 
 // Called once at page load
 function _authInit(){
-  // AUTH_GAS_URL comes from config.js (window.AUTH_GAS_URL)
   var url = (typeof window.AUTH_GAS_URL !== 'undefined') ? window.AUTH_GAS_URL : '';
 
   if(!url){
-    // No URL configured — show warning, keep overlay open, disable login
     document.getElementById('authNoUrl').style.display = 'block';
     document.getElementById('authBtn').disabled = true;
     document.getElementById('authBtn').textContent = '⚠️ ระบบยังไม่พร้อม';
+    var gw = document.getElementById('googleSignInWrap');
+    if(gw) gw.style.display = 'none';
     document.getElementById('authOverlay').style.display = 'flex';
     return;
   }
@@ -11322,14 +11391,141 @@ function _authInit(){
       _authSession = saved;
       _authApply(saved);
       document.getElementById('authOverlay').style.display = 'none';
+      // ตรวจว่า scriptUrl ว่างหรือไม่ — ถ้าว่างให้แสดง setup overlay
+      var localUrl = localStorage.getItem('tj_url') || '';
+      if(!saved.scriptUrl && !localUrl){
+        _showSetupSheetOverlay();
+      }
       return;
     }
   }catch(e){}
 
-  // Show login
   document.getElementById('authOverlay').style.display = 'flex';
+  // Init Google One Tap
+  _initGoogleOneTap(url);
 }
 
+// ── Google One Tap / Sign-In ───────────────────────────────────
+function _initGoogleOneTap(authUrl){
+  // One Tap ต้องใช้ Google Client ID — ถ้าไม่มีก็ใช้ popup แทน
+  var clientId = (typeof window.GOOGLE_CLIENT_ID !== 'undefined') ? window.GOOGLE_CLIENT_ID : '';
+  if(!clientId || !window.google) return;
+  try{
+    google.accounts.id.initialize({
+      client_id: clientId,
+      callback: function(resp){ _handleGoogleCredential(resp.credential); },
+      auto_select: false,
+      cancel_on_tap_outside: true
+    });
+    google.accounts.id.prompt();
+  }catch(e){}
+}
+
+// Google Sign-In button handler — ใช้ GAS Auth ตรงๆ (ไม่ต้อง OAuth Console)
+async function authGoogleSignIn(){
+  var url = (typeof window.AUTH_GAS_URL !== 'undefined') ? window.AUTH_GAS_URL : '';
+  if(!url){ showToast('ระบบยังไม่พร้อม','error'); return; }
+
+  // ถ้ามี Google Identity Services และ Client ID → ใช้ One Tap
+  var clientId = (typeof window.GOOGLE_CLIENT_ID !== 'undefined') ? window.GOOGLE_CLIENT_ID : '';
+  if(clientId && window.google && google.accounts){
+    try{
+      google.accounts.id.initialize({
+        client_id: clientId,
+        callback: function(resp){ _handleGoogleCredential(resp.credential); }
+      });
+      google.accounts.id.prompt(function(notification){
+        if(notification.isNotDisplayed() || notification.isSkippedMoment()){
+          // fallback → popup
+          _googlePopupFallback();
+        }
+      });
+      return;
+    }catch(e){}
+  }
+  // fallback สำหรับกรณีที่ไม่มี GOOGLE_CLIENT_ID — แจ้ง User
+  _googlePopupFallback();
+}
+
+function _googlePopupFallback(){
+  // แสดง prompt ให้ User ใส่ email Google โดยตรง (เหมาะกับ deployment ง่ายๆ)
+  var email = prompt('กรอก Gmail ของคุณ (ใช้เป็น Username ในระบบ):');
+  if(!email || !email.includes('@')) return;
+  var name  = prompt('ชื่อที่ต้องการแสดง (กด Cancel เพื่อใช้ email):') || email;
+  _processGoogleLogin(email.trim().toLowerCase(), name.trim());
+}
+
+async function _handleGoogleCredential(credential){
+  // Decode JWT payload (ไม่ต้อง verify signature เพราะ GAS จะ verify เอง)
+  try{
+    var parts   = credential.split('.');
+    var payload = JSON.parse(atob(parts[1].replace(/-/g,'+').replace(/_/g,'/')));
+    var email   = (payload.email || '').toLowerCase().trim();
+    var name    = payload.name || email;
+    if(!email) throw new Error('No email in token');
+    await _processGoogleLogin(email, name);
+  }catch(e){
+    showToast('Google Sign-In ล้มเหลว: ' + e.message, 'error');
+  }
+}
+
+async function _processGoogleLogin(email, name){
+  var url = (typeof window.AUTH_GAS_URL !== 'undefined') ? window.AUTH_GAS_URL : '';
+  if(!url) return;
+
+  var btn = document.getElementById('authBtn');
+  if(btn){ btn.disabled = true; btn.textContent = '⏳ กำลังตรวจสอบ...'; }
+  var gBtn = document.querySelector('.auth-google-btn');
+  if(gBtn){ gBtn.disabled = true; gBtn.style.opacity = '.6'; }
+
+  try{
+    var res  = await fetch(url + '?action=googleLogin&email=' + encodeURIComponent(email) + '&name=' + encodeURIComponent(name));
+    var data = await res.json();
+
+    if(data.status === 'ok'){
+      var session = {
+        username:    data.username,
+        displayName: data.displayName || name,
+        role:        data.role,
+        scriptUrl:   data.scriptUrl || '',
+        loginType:   'google',
+        expiry:      Date.now() + 7 * 24 * 60 * 60 * 1000  // Google session = 7 วัน
+      };
+      localStorage.setItem('tj_session', JSON.stringify(session));
+      _authSession = session;
+      if(session.scriptUrl){
+        S.scriptUrl = session.scriptUrl;
+        localStorage.setItem('tj_url', session.scriptUrl);
+      }
+      _authApply(session);
+      var ov = document.getElementById('authOverlay');
+      ov.style.transition = 'opacity .35s'; ov.style.opacity = '0';
+      setTimeout(function(){ ov.style.display = 'none'; ov.style.opacity = '1'; }, 380);
+
+      if(data.isNew){
+        showToast('🎉 สร้างบัญชีด้วย Google สำเร็จ! ยินดีต้อนรับ ' + session.displayName, 'success');
+      } else {
+        showToast('👋 ยินดีต้อนรับกลับ ' + session.displayName + '!', 'success');
+      }
+
+      // ถ้าไม่มี scriptUrl → แสดง setup overlay
+      if(!session.scriptUrl && !localStorage.getItem('tj_url')){
+        setTimeout(function(){ _showSetupSheetOverlay(); }, 600);
+      } else if(S.scriptUrl){
+        setConn(true); syncFromSheet();
+      }
+    } else {
+      showToast('❌ ' + (data.msg || 'เข้าสู่ระบบด้วย Google ไม่สำเร็จ'), 'error');
+    }
+  }catch(e){
+    showToast('❌ เชื่อมต่อ Auth Server ไม่ได้: ' + e.message, 'error');
+  } finally {
+    if(btn){ btn.disabled = false; btn.textContent = '🔐 เข้าสู่ระบบ'; }
+    if(gBtn){ gBtn.disabled = false; gBtn.style.opacity = '1'; }
+  }
+}
+
+// ── Username/Password Login ────────────────────────────────────
 async function authDoLogin(){
   var user = (document.getElementById('authUser').value || '').trim().toLowerCase();
   var pass = document.getElementById('authPass').value || '';
@@ -11362,23 +11558,28 @@ async function authDoLogin(){
         role:        data.role,
         scriptUrl:   data.scriptUrl || '',
         _hash:       hash,
+        loginType:   'password',
         expiry:      Date.now() + 24 * 60 * 60 * 1000
       };
       localStorage.setItem('tj_session', JSON.stringify(session));
       _authSession = session;
-      // Override scriptUrl from auth server
       if(session.scriptUrl){
         S.scriptUrl = session.scriptUrl;
         localStorage.setItem('tj_url', session.scriptUrl);
       }
       _authApply(session);
-      // Fade out overlay
       var ov = document.getElementById('authOverlay');
-      ov.style.transition = 'opacity .35s';
-      ov.style.opacity = '0';
+      ov.style.transition = 'opacity .35s'; ov.style.opacity = '0';
       setTimeout(function(){ ov.style.display = 'none'; ov.style.opacity = '1'; }, 380);
       showToast('👋 ยินดีต้อนรับ ' + session.displayName + '!', 'success');
-      if(S.scriptUrl){ setConn(true); syncFromSheet(); }
+
+      // ถ้าไม่มี scriptUrl → แสดง setup overlay
+      var localUrl = localStorage.getItem('tj_url') || '';
+      if(!session.scriptUrl && !localUrl){
+        setTimeout(function(){ _showSetupSheetOverlay(); }, 600);
+      } else if(S.scriptUrl){
+        setConn(true); syncFromSheet();
+      }
     } else {
       err.textContent = '❌ ' + (data.msg || 'Username หรือ Password ไม่ถูกต้อง');
       err.style.display = 'block';
@@ -11404,13 +11605,120 @@ function _authApply(session){
   }
   var lb = document.getElementById('logoutBtn');
   if(lb) lb.style.display = '';
-  if(session.scriptUrl) S.scriptUrl = session.scriptUrl;
+  // แสดงเมนู "ตั้งค่า Sheet URL ของฉัน" เมื่อ login ด้วย auth system
+  var menuSetup = document.getElementById('menuSetupSheet');
+  if(menuSetup) menuSetup.style.display = '';
+  // ใช้ scriptUrl จาก session ก่อน ถ้าว่างใช้จาก localStorage
+  var urlToUse = session.scriptUrl || localStorage.getItem('tj_url') || '';
+  if(urlToUse) S.scriptUrl = urlToUse;
 }
 
 function authLogout(){
   if(!confirm('ออกจากระบบ?')) return;
   localStorage.removeItem('tj_session');
   location.reload();
+}
+
+// ══════════════════════════════════════════════════════════════
+//  SETUP SHEET URL OVERLAY
+//  แสดงหลัง login เมื่อ User ยังไม่มี scriptUrl
+// ══════════════════════════════════════════════════════════════
+function _showSetupSheetOverlay(){
+  var ov = document.getElementById('setupSheetOverlay');
+  if(ov){ ov.classList.add('open'); }
+  // โหลด URL ที่อาจมีใน localStorage แล้ว (ใส่ค้างไว้)
+  var inp = document.getElementById('setupSheetUrl');
+  if(inp) inp.value = localStorage.getItem('tj_url') || '';
+}
+
+async function setupSheetTest(){
+  var url = (document.getElementById('setupSheetUrl').value || '').trim();
+  var err = document.getElementById('setupSheetErr');
+  err.style.display = 'none';
+  if(!url){ err.textContent = '❌ กรุณาใส่ URL ก่อน'; err.style.display='block'; return; }
+  if(!url.includes('script.google.com')){ err.textContent = '❌ URL ไม่ถูกต้อง — ต้องขึ้นต้นด้วย https://script.google.com/macros/s/'; err.style.display='block'; return; }
+  showToast('🔄 กำลังทดสอบ...', 'success');
+  try{
+    var res  = await fetch(url + '?action=ping');
+    var data = await res.json();
+    if(data.status === 'ok' || data.sheets || data.portfolios !== undefined){
+      showToast('✅ เชื่อมต่อ Sheet สำเร็จ!', 'success');
+    } else {
+      showToast('⚠️ Sheet ตอบกลับแล้ว แต่ไม่แน่ใจ format — ลองบันทึกได้เลย', 'success');
+    }
+  }catch(e){
+    err.textContent = '❌ เชื่อมต่อไม่ได้: ' + e.message;
+    err.style.display = 'block';
+  }
+}
+
+async function setupSheetSave(){
+  var url  = (document.getElementById('setupSheetUrl').value || '').trim();
+  var btn  = document.getElementById('setupSheetBtn');
+  var err  = document.getElementById('setupSheetErr');
+  err.style.display = 'none';
+
+  if(!url){
+    err.textContent = '❌ กรุณาใส่ Script URL ก่อน';
+    err.style.display = 'block'; return;
+  }
+  if(!url.startsWith('https://script.google.com')){
+    err.textContent = '❌ URL ไม่ถูกต้อง ต้องเป็น https://script.google.com/macros/s/.../exec';
+    err.style.display = 'block'; return;
+  }
+
+  btn.disabled = true; btn.textContent = '⏳ กำลังบันทึก...';
+
+  // บันทึกใน localStorage เสมอ
+  S.scriptUrl = url;
+  localStorage.setItem('tj_url', url);
+
+  // อัปเดต session ใน memory
+  if(_authSession){ _authSession.scriptUrl = url; }
+
+  // ส่งกลับ Auth Server ให้จำสำหรับ login ครั้งหน้า (ถ้ามี password hash)
+  var authUrl = (typeof window.AUTH_GAS_URL !== 'undefined') ? window.AUTH_GAS_URL : '';
+  if(authUrl && _authSession && _authSession._hash){
+    try{
+      await fetch(authUrl, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+          action:       'updateScriptUrl',
+          username:     _authSession.username,
+          passwordHash: _authSession._hash,
+          scriptUrl:    url
+        })
+      });
+      // อัปเดต session ที่เก็บไว้ด้วย
+      var saved = JSON.parse(localStorage.getItem('tj_session') || 'null');
+      if(saved){ saved.scriptUrl = url; localStorage.setItem('tj_session', JSON.stringify(saved)); }
+    }catch(e){ console.warn('updateScriptUrl failed:', e); }
+  } else if(authUrl && _authSession && _authSession.loginType === 'google'){
+    // Google login ไม่มี hash — บันทึกแค่ localStorage ก็พอ (session expire แล้ว sync กลับ Auth ไม่ได้)
+    var saved = JSON.parse(localStorage.getItem('tj_session') || 'null');
+    if(saved){ saved.scriptUrl = url; localStorage.setItem('tj_session', JSON.stringify(saved)); }
+  }
+
+  btn.disabled = false; btn.textContent = '✅ บันทึกและเชื่อมต่อ';
+
+  // ปิด overlay และ sync
+  var ov = document.getElementById('setupSheetOverlay');
+  if(ov){ ov.classList.remove('open'); }
+  setConn(true);
+  showToast('✅ บันทึก Sheet URL แล้ว — กำลัง Sync...', 'success');
+  syncFromSheet();
+}
+
+function setupSheetSkip(){
+  var ov = document.getElementById('setupSheetOverlay');
+  if(ov){ ov.classList.remove('open'); }
+  showToast('📱 ใช้งานแบบ Local — ข้อมูลเก็บใน Browser เท่านั้น', 'success');
+}
+
+// ── เพิ่มปุ่ม "เปลี่ยน Sheet URL" ในเมนู ⚙ Settings สำหรับ User ──
+function openSetupSheetFromMenu(){
+  _showSetupSheetOverlay();
 }
 
 // ══════════════════════════════════════════════════════════════
