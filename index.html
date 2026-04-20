@@ -842,6 +842,8 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
             <select id="dtfClass" onchange="dtSaveFilterState();dtRender()" style="width:100%;background:var(--bg-input);border:1px solid var(--border);color:var(--text-primary);border-radius:5px;font-size:11px;padding:4px 6px;height:28px;"><option value="">All</option></select></div>
           <div><div style="font-size:9px;color:var(--text-muted);margin-bottom:3px;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center;">Candle <button onclick="event.stopPropagation();openDropEdit('dtfModel','Candle (Filter)')" style="font-size:8px;background:none;border:none;color:var(--accent);cursor:pointer;padding:0;">✎</button></div>
             <select id="dtfModel" onchange="dtSaveFilterState();dtRender()" style="width:100%;background:var(--bg-input);border:1px solid var(--border);color:var(--text-primary);border-radius:5px;font-size:11px;padding:4px 6px;height:28px;"><option value="">All</option></select></div>
+          <div><div style="font-size:9px;color:var(--text-muted);margin-bottom:3px;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center;">Fibo Level <button onclick="event.stopPropagation();openDropEdit('dtfFibo','Fibo Level (Filter)')" style="font-size:8px;background:none;border:none;color:var(--accent);cursor:pointer;padding:0;">✎</button></div>
+            <select id="dtfFibo" onchange="dtSaveFilterState();dtRender()" style="width:100%;background:var(--bg-input);border:1px solid var(--border);color:var(--text-primary);border-radius:5px;font-size:11px;padding:4px 6px;height:28px;"><option value="">All</option><option>200</option><option>400</option><option>600</option><option>800</option></select></div>
           <div><div style="font-size:9px;color:var(--text-muted);margin-bottom:3px;text-transform:uppercase;">Duration (≤ นาที)</div>
             <input type="number" id="dtfDur" placeholder="ไม่จำกัด" min="0" oninput="dtSaveFilterState();dtRender()" style="width:100%;background:var(--bg-input);border:1px solid var(--border);color:var(--text-primary);border-radius:5px;font-size:11px;padding:4px 6px;height:28px;"></div>
           <div><div style="font-size:9px;color:var(--text-muted);margin-bottom:3px;text-transform:uppercase;">&#x23F0; Entry Time</div>
@@ -922,6 +924,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
               <th id="dth_candle" onclick="dtSortBy('candle')" style="padding:7px 6px;text-align:left;color:var(--text-muted);font-weight:600;white-space:nowrap;cursor:pointer;user-select:none;transition:color .15s;" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-muted)'">Candle <span id="dthi_candle" style="font-size:9px;opacity:.5;"></span></th>
               <th id="dth_zone" onclick="dtSortBy('zone')" style="padding:7px 6px;text-align:left;color:var(--text-muted);font-weight:600;white-space:nowrap;cursor:pointer;user-select:none;transition:color .15s;" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-muted)'">Zone <span id="dthi_zone" style="font-size:9px;opacity:.5;"></span></th>
               <th id="dth_confirm" onclick="dtSortBy('confirm')" style="padding:7px 6px;text-align:left;color:var(--text-muted);font-weight:600;white-space:nowrap;cursor:pointer;user-select:none;transition:color .15s;" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-muted)'">Confirm <span id="dthi_confirm" style="font-size:9px;opacity:.5;"></span></th>
+              <th id="dth_fibo" onclick="dtSortBy('fibo')" style="padding:7px 6px;text-align:left;color:var(--text-muted);font-weight:600;white-space:nowrap;cursor:pointer;user-select:none;transition:color .15s;" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-muted)'">Fibo <span id="dthi_fibo" style="font-size:9px;opacity:.5;"></span></th>
               <th id="dth_entry" onclick="dtSortBy('entry')" style="padding:7px 6px;text-align:right;color:var(--text-muted);font-weight:600;white-space:nowrap;cursor:pointer;user-select:none;transition:color .15s;" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-muted)'">Entry <span id="dthi_entry" style="font-size:9px;opacity:.5;"></span></th>
               <th id="dth_tp" onclick="dtSortBy('tp')" style="padding:7px 6px;text-align:right;color:var(--text-muted);font-weight:600;white-space:nowrap;cursor:pointer;user-select:none;transition:color .15s;" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-muted)'">TP <span id="dthi_tp" style="font-size:9px;opacity:.5;"></span></th>
               <th id="dth_sl" onclick="dtSortBy('sl')" style="padding:7px 6px;text-align:right;color:var(--text-muted);font-weight:600;white-space:nowrap;cursor:pointer;user-select:none;transition:color .15s;" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-muted)'">SL <span id="dthi_sl" style="font-size:9px;opacity:.5;"></span></th>
@@ -1374,6 +1377,10 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
                 <div class="field-label" style="display:flex;justify-content:space-between;align-items:center;">Confirm <button onclick="openDropEdit('oConfirm','Confirm')" style="font-size:9px;background:none;border:none;color:var(--accent);cursor:pointer;padding:0;">✎ Edit</button></div>
                 <select class="form-input" id="oConfirm"><option value="">Select</option><option>M1</option><option>M5</option><option>M15</option><option>M30</option><option>H1</option><option>H4</option><option>SMC</option><option>Price Action</option><option>FIBO</option></select>
               </div>
+              <div style="margin-bottom:8px;">
+                <div class="field-label" style="display:flex;justify-content:space-between;align-items:center;">Fibo Level <button onclick="openDropEdit('oFibo','Fibo Level')" style="font-size:9px;background:none;border:none;color:var(--accent);cursor:pointer;padding:0;">✎ Edit</button></div>
+                <select class="form-input" id="oFibo"><option value="">— Select</option><option>200</option><option>400</option><option>600</option><option>800</option></select>
+              </div>
             </div>
           </div>
 
@@ -1402,7 +1409,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
         </div>
       </div>
       <div class="empty-state" id="emptyTr">No trades logged for this day</div>
-      <div style="overflow-x:auto;max-width:100%;"><table class="trade-table" id="trTable" style="display:none;width:100%;table-layout:auto;"><thead><tr><th style="white-space:nowrap;">Asset</th><th>Side</th><th>Lots</th><th style="white-space:nowrap;">Entry Time</th><th>Session</th><th>Entry</th><th>Close</th><th>P&L</th><th>Result</th><th style="white-space:nowrap;">Time in Pos</th><th>Note</th><th>Img</th><th></th></tr></thead><tbody id="trBody"></tbody></table></div>
+      <div style="overflow-x:auto;max-width:100%;"><table class="trade-table" id="trTable" style="display:none;width:100%;table-layout:auto;"><thead><tr><th style="white-space:nowrap;">Asset</th><th>Side</th><th>Lots</th><th style="white-space:nowrap;">Entry Time</th><th>Session</th><th>Entry</th><th>Close</th><th>P&L</th><th>Result</th><th style="white-space:nowrap;">Time in Pos</th><th>Fibo</th><th>Note</th><th>Img</th><th></th></tr></thead><tbody id="trBody"></tbody></table></div>
       <div id="dayPnlRow" style="display:none;margin-top:9px;padding:8px;background:var(--bg-input);border-radius:var(--radius-sm);display:none;justify-content:space-between;align-items:center;">
         <span style="font-size:11px;color:var(--text-muted);">Net P&L:</span>
         <span style="font-size:13px;font-weight:600;font-family:var(--font-mono)" id="dayPnlV">$0.00</span>
@@ -1494,7 +1501,7 @@ var UNIFIED_HEADER=[
   'MaxRR','Result',
   'EntryDateTime','CloseDateTime','TimeInPos','SetupDuration',
   'Session','SetupClass','Candle','Code','Mode','Timeframe',
-  'Trend','ZoneMit','Zone','Confirm',
+  'Trend','ZoneMit','Zone','Confirm','FiboLevel',
   'Emotion','Discipline',
   'Note','ImageLink','UpdatedAt'
 ];
@@ -1815,7 +1822,7 @@ function saveDataTrade(d){
     d.entryDate||d.entryDateTime||d.date||'', d.closeDate||d.closeDateTime||'',
     d.timeInPos||'', d.setupDuration||'',
     d.session||d.sessions||'', d.setupClass||'', d.candle||'', d.code||'', d.mode||'', d.tf||'',
-    d.trend||'', d.zoneMit||'', d.zone||'', d.confirm||'',
+    d.trend||'', d.zoneMit||'', d.zone||'', d.confirm||'', d.fibo||'',
     d.emo||d.emotion||'', d.disc!=null?d.disc:d.discipline||'',
     d.note||'', d.imgLink||'', _now()
   ];
@@ -1847,7 +1854,7 @@ function batchSaveDataTrades(d){
       t.entryDate||t.entryDateTime||t.date||'', t.closeDate||t.closeDateTime||'',
       t.timeInPos||'', t.setupDuration||'',
       t.session||t.sessions||'', t.setupClass||'', t.candle||'', t.code||'', t.mode||'', t.tf||'',
-      t.trend||'', t.zoneMit||'', t.zone||'', t.confirm||'',
+      t.trend||'', t.zoneMit||'', t.zone||'', t.confirm||'', t.fibo||'',
       t.emo||t.emotion||'', t.disc!=null?t.disc:t.discipline||'',
       t.note||'', t.imgLink||'', now
     ];
@@ -1897,7 +1904,7 @@ function saveTrade(d){
     d.maxRR||'', d.result||'',
     d.entryDate||d.date||'', d.closeDate||'', d.timeInPos||'', d.setupDuration||'',
     d.sessions||d.session||'', d.setupClass||'', d.candle||'', d.code||'', d.mode||'', d.tf||'',
-    d.trend||'', d.zone||d.zoneMit||'', d.zone||'', d.confirm||'',
+    d.trend||'', d.zone||d.zoneMit||'', d.zone||'', d.confirm||'', d.fibo||'',
     d.emotion||'', d.discipline||'',
     d.note||'', d.imgLink||'', _now()
   ];
@@ -1934,7 +1941,7 @@ function batchSaveTrades(d){
       t.maxRR||'', t.result||'',
       t.entryDate||t.date||'', t.closeDate||'', t.timeInPos||'', t.setupDuration||'',
       t.sessions||t.session||'', t.setupClass||'', t.candle||'', t.code||'', t.mode||'', t.tf||'',
-      t.trend||'', t.zoneMit||t.zone||'', t.zone||'', t.confirm||'',
+      t.trend||'', t.zoneMit||t.zone||'', t.zone||'', t.confirm||'', t.fibo||'',
       t.emotion||'', t.discipline||'',
       t.note||'', t.imgLink||'', now
     ];
@@ -2257,7 +2264,7 @@ function setupSheets(){
   var ss=SpreadsheetApp.getActiveSpreadsheet();
   var def=ss.getSheetByName('Sheet1');
   if(def&amp;&amp;ss.getSheets().length&gt;1) ss.deleteSheet(def);
-  SpreadsheetApp.getUi().alert('✅ TradeLog Pro+ v5.3 พร้อม!\n\nSheets: Trades | DataTrades | Sessions | Summary | Assets | Journal | Log | DeletedPorts\n✨ Unified Schema: ทั้ง Trades และ DataTrades ใช้ Header เดียวกัน 100%\nField: ID, Date, Day, Portfolio, Asset, Side, Lots, Entry, Close, TP, SL,\nPnL($), Fees($), Commission($), Risk, MaxRR, Result,\nEntryDateTime, CloseDateTime, TimeInPos, SetupDuration,\nSession, SetupClass, Candle, Code, Mode, Timeframe,\nTrend, ZoneMit, Zone, Confirm, Emotion, Discipline, Note, ImageLink, UpdatedAt\n\n⚡ หมายเหตุ: ถ้า Sheet เดิมมี Header ไม่ครบ ระบบจะเพิ่ม Column ใหม่ให้อัตโนมัติ');
+  SpreadsheetApp.getUi().alert('✅ TradeLog Pro+ v5.4 พร้อม!\n\nSheets: Trades | DataTrades | Sessions | Summary | Assets | Journal | Log | DeletedPorts\n✨ Unified Schema: ทั้ง Trades และ DataTrades ใช้ Header เดียวกัน 100%\n📐 ใหม่: FiboLevel field (200/400/600/800) + Filter + Chart\nField หลัก: ID, Date, Day, Portfolio, Asset, Side, Lots, Entry, Close, TP, SL,\nPnL($), Fees($), Commission($), Risk, MaxRR, Result,\nEntryDateTime, CloseDateTime, TimeInPos, SetupDuration,\nSession, SetupClass, Candle, Code, Mode, Timeframe,\nTrend, ZoneMit, Zone, Confirm, FiboLevel, Emotion, Discipline,\nNote, ImageLink, UpdatedAt\n\n⚡ หมายเหตุ: ถ้า Sheet เดิมมี Header ไม่ครบ ระบบจะเพิ่ม Column ใหม่ให้อัตโนมัติ');
 }
 function onOpen(){
   SpreadsheetApp.getUi().createMenu('🔧 TradeLog Pro+')
@@ -3556,6 +3563,7 @@ var DROP_DEFAULTS = {
   oTrend:   ['BMS+FVG','Bos1','Bos1-ย้าย','Bos2','FVG'],
   oZone:    ['Demand','Supply','FVG','iFVG','IDM','OB','POI'],
   oConfirm: ['M1','M5','M15','M30','H1','H4','SMC','Price Action','FIBO'],
+  oFibo:    ['200','400','600','800'],
   oTF:      ['M1','M5','M15','M30','H1','H4','D1','W'],
   oMode:    ['BE','CHe','BE>CHe','BE>BE','CHe>BE','CHe>CHe'],
   dtAsset:  ['MNQ1','NQ1','MGC1','GC1','XAU/USD','EURUSD','GBPUSD','USDJPY','BTCUSD'],
@@ -3568,6 +3576,7 @@ var DROP_DEFAULTS = {
   dtMitZone:['BMS+FVG','Bos1','Bos2','FVG','OB'],
   dtZone:   ['Demand','Supply','FVG','iFVG','OB','POI'],
   dtConfirm:['M1','M5','M15','BOS','CHoCH','SMC'],
+  dtFibo:   ['200','400','600','800'],
   dtResult: ['Win','Loss','Miss'],
   dtfSession:['Sydney','Tokyo','London','New York'],
   dtfCode:   ['Code1','Code2'],
@@ -3576,7 +3585,8 @@ var DROP_DEFAULTS = {
   dtfResult: ['Win','Loss','Miss'],
   dtfAsset:  ['GC1','MGC1','MNQ1','NQ1'],
   dtfDay:    ['Mon','Tue','Wed','Thu','Fri'],
-  dtfClass:  ['A+','A','B','C']
+  dtfClass:  ['A+','A','B','C'],
+  dtfFibo:   ['200','400','600','800']
 };
 function loadDropOptions(){
   // Migrate: reset oTrend if it still has old Trend values (Bullish/Bearish/Sideways)
@@ -3641,7 +3651,7 @@ function loadDropOptions(){
     var sel = document.getElementById(id);
     if(!sel) return;
     // Filter dropdowns need "All" as first option
-    var isFilter = (id==='dtfSession'||id==='dtfCode'||id==='dtfMode'||id==='dtfModel'||id==='dtfResult'||id==='dtfAsset'||id==='dtfDay'||id==='dtfClass');
+    var isFilter = (id==='dtfSession'||id==='dtfCode'||id==='dtfMode'||id==='dtfModel'||id==='dtfResult'||id==='dtfAsset'||id==='dtfDay'||id==='dtfClass'||id==='dtfFibo');
     // oResultSel has a special placeholder with value="BE" — clear ALL and rebuild
     if(id==='oResultSel'){
       sel.innerHTML='';
@@ -3668,7 +3678,7 @@ function loadDropOptions(){
     }
   });
   // Sync filter dropdowns from their form equivalents
-  var _formFilterSync={dtSession:'dtfSession',dtCode:'dtfCode',dtMode:'dtfMode',dtCandle:'dtfModel',dtResult:'dtfResult'};
+  var _formFilterSync={dtSession:'dtfSession',dtCode:'dtfCode',dtMode:'dtfMode',dtCandle:'dtfModel',dtResult:'dtfResult',dtFibo:'dtfFibo'};
   Object.keys(_formFilterSync).forEach(function(formId){
     var filterId=_formFilterSync[formId];
     var filterSel=document.getElementById(filterId);
@@ -3689,7 +3699,7 @@ function saveDropOptions(selectId){
   var opts=Array.from(sel.options).filter(function(o){return o.value!='';}).map(function(o){return o.text;});
   localStorage.setItem('tj_drop_'+selectId, JSON.stringify(opts));
   // Sync form dropdown → filter dropdown
-  var formToFilter = {dtSession:'dtfSession', dtCode:'dtfCode', dtMode:'dtfMode', dtCandle:'dtfModel', dtResult:'dtfResult'};
+  var formToFilter = {dtSession:'dtfSession', dtCode:'dtfCode', dtMode:'dtfMode', dtCandle:'dtfModel', dtResult:'dtfResult', dtFibo:'dtfFibo', oFibo:'dtfFibo'};
   if(formToFilter[selectId]){
     localStorage.setItem('tj_drop_'+formToFilter[selectId], JSON.stringify(opts));
     var filterSel = document.getElementById(formToFilter[selectId]);
@@ -3709,7 +3719,7 @@ function saveDropOptions(selectId){
     }
   }
   // Sync oCandle <-> dtCandle and oCode <-> dtCode bidirectionally
-  var orderDataSync = {oCandle:'dtCandle', dtCandle:'oCandle', oCode:'dtCode', dtCode:'oCode', oResultSel:'dtResult', dtResult:'oResultSel'};
+  var orderDataSync = {oCandle:'dtCandle', dtCandle:'oCandle', oCode:'dtCode', dtCode:'oCode', oResultSel:'dtResult', dtResult:'oResultSel', oFibo:'dtFibo', dtFibo:'oFibo'};
   if(orderDataSync[selectId]){
     var syncId=orderDataSync[selectId];
     localStorage.setItem('tj_drop_'+syncId, JSON.stringify(opts));
@@ -4258,7 +4268,7 @@ function openDay(dt){
   var addBtn=document.querySelector('#orderForm .btn-primary');
   if(addBtn){addBtn.textContent='✓ Add Trade';addBtn.onclick=function(){addTrade();};}
   // reset new order form fields
-  ['oMaxRR','oSetupClass','oCandle','oCode','oMode','oTF','oTrend','oZone','oConfirm'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+  ['oMaxRR','oSetupClass','oCandle','oCode','oMode','oTF','oTrend','oZone','oConfirm','oFibo'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
   document.querySelectorAll('#oSessionTagRow .tag').forEach(function(el){el.classList.remove('active');});
   document.getElementById('oEmoSlider').value=5;updateOrderEmo(5);
   document.getElementById('oDiscSlider').value=5;updateOrderDisc(5);
@@ -4502,6 +4512,7 @@ function addTrade(){if(_isReadOnly){showToast('🔒 โหมดดูเท่�
     zone:document.getElementById('oZone').value||'',
     zoneMit:'',
     confirm:document.getElementById('oConfirm').value||'',
+    fibo:document.getElementById('oFibo')?document.getElementById('oFibo').value||'':'',
     sessions:orderSessions.join(', '),
     session:orderSessions.join(', '),
     day:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][new Date(document.getElementById('oEntryDate').value||S.mKey).getDay()]||'',
@@ -4586,6 +4597,7 @@ function showTradeConfirm(t, onConfirm){
   var optHtml='';
   if(t.sessions) optHtml+='<div style="font-size:10px;margin-bottom:4px;"><span style="color:var(--text-muted);">Session: </span><span style="color:var(--accent);">'+escHtml(t.sessions)+'</span></div>';
   if(t.trend||t.zone||t.confirm) optHtml+='<div style="font-size:10px;margin-bottom:4px;"><span style="color:var(--text-muted);">Zone: </span>'+(t.trend?'<span style="color:var(--text-secondary);">'+escHtml(t.trend)+'</span> ':'')+(t.zone?'<span style="color:var(--text-secondary);">'+escHtml(t.zone)+'</span> ':'')+(t.confirm?'<span style="color:var(--text-secondary);">'+escHtml(t.confirm)+'</span>':'')+'</div>';
+  if(t.fibo) optHtml+='<div style="font-size:10px;margin-bottom:4px;"><span style="color:var(--text-muted);">Fibo Level: </span><span style="color:var(--teal);font-weight:700;font-family:var(--font-mono);">'+escHtml(t.fibo)+'</span></div>';
   if(t.tf||t.mode||t.candle) optHtml+='<div style="font-size:10px;margin-bottom:4px;"><span style="color:var(--text-muted);">Setup: </span>'+(t.tf?escHtml(t.tf)+' ':'')+(t.candle?escHtml(t.candle)+' ':'')+(t.mode?escHtml(t.mode):'')+'</div>';
   if(t.emotion) optHtml+='<div style="font-size:10px;margin-bottom:4px;"><span style="color:var(--text-muted);">Emotion: </span><span style="color:var(--text-secondary);">'+t.emotion+'/10</span>  <span style="color:var(--text-muted);">Discipline: </span><span style="color:var(--text-secondary);">'+t.discipline+'/10</span></div>';
   if(t.note) optHtml+='<div style="font-size:10px;margin-bottom:4px;"><span style="color:var(--text-muted);">Note: </span><span style="color:var(--text-secondary);font-style:italic;">'+escHtml(t.note.substring(0,80))+(t.note.length>80?'…':'')+'</span></div>';
@@ -4708,7 +4720,8 @@ function renderTT(){
     var resBadge=t.result==='Win'?'<span style="color:var(--green);font-size:10px;font-weight:600;">✓W</span>':t.result==='Loss'?'<span style="color:var(--red);font-size:10px;font-weight:600;">✗L</span>':'<span style="color:var(--amber);font-size:10px;">BE</span>';
     var imgCell=t.imgLink?'<span onclick="window.open(\''+t.imgLink+'\',\'_blank\')" style="font-size:12px;cursor:pointer;">🖼️</span>':'-';
     var sessStr=t.sessions?(t.sessions.split(',').map(function(s){return s.trim();}).filter(Boolean).join(', ')):'';
-    return '<tr><td style="font-family:var(--font-mono);font-weight:500;white-space:nowrap;">'+t.asset+'</td><td><span class="side-badge '+t.side.toLowerCase()+'">'+t.side+'</span></td><td>'+t.lots+'</td><td style="font-size:10px;font-family:var(--font-mono);color:var(--text-muted);white-space:nowrap;line-height:1.4;">'+_fmtEntryTime(t)+'</td><td style="font-size:10px;color:var(--text-secondary);white-space:nowrap;max-width:80px;overflow:hidden;text-overflow:ellipsis;" title="'+sessStr+'">'+sessStr+'</td><td style="font-family:var(--font-mono)">'+t.entry+'</td><td style="font-family:var(--font-mono)">'+(t.close||'-')+'</td><td class="'+(p>=0?'pnl-pos':'pnl-neg')+'">'+(p>=0?'+':'')+'$'+Math.abs(p).toFixed(2)+'</td><td>'+resBadge+'</td><td style="font-size:10px;color:var(--text-muted);white-space:nowrap;">'+(t.timeInPos||'-')+'</td><td style="font-size:10px;color:var(--text-secondary);max-width:80px;overflow:hidden;text-overflow:ellipsis;" title="'+t.note+'">'+t.note+'</td><td>'+imgCell+'</td><td style="white-space:nowrap;"><button class="btn-del" onclick="editTr('+i+')" title="แก้ไข" style="color:var(--accent);margin-right:2px;">✎</button><button class="btn-del" onclick="moveTrDate('+i+')" title="ย้ายไปวันอื่น" style="color:var(--amber);margin-right:2px;">📅</button><button class="btn-del" onclick="delTr('+i+')">✕</button></td></tr>';
+    var fiboCell=(function(){var fc={'200':'var(--teal)','400':'var(--purple)','600':'var(--green)','800':'var(--amber)'};var fv=t.fibo||'';return fv?'<span style="font-size:10px;font-weight:700;color:'+(fc[fv]||'var(--accent)')+';">'+fv+'</span>':'-';})();
+    return '<tr><td style="font-family:var(--font-mono);font-weight:500;white-space:nowrap;">'+t.asset+'</td><td><span class="side-badge '+t.side.toLowerCase()+'">'+t.side+'</span></td><td>'+t.lots+'</td><td style="font-size:10px;font-family:var(--font-mono);color:var(--text-muted);white-space:nowrap;line-height:1.4;">'+_fmtEntryTime(t)+'</td><td style="font-size:10px;color:var(--text-secondary);white-space:nowrap;max-width:80px;overflow:hidden;text-overflow:ellipsis;" title="'+sessStr+'">'+sessStr+'</td><td style="font-family:var(--font-mono)">'+t.entry+'</td><td style="font-family:var(--font-mono)">'+(t.close||'-')+'</td><td class="'+(p>=0?'pnl-pos':'pnl-neg')+'">'+(p>=0?'+':'')+'$'+Math.abs(p).toFixed(2)+'</td><td>'+resBadge+'</td><td style="font-size:10px;color:var(--text-muted);white-space:nowrap;">'+(t.timeInPos||'-')+'</td><td style="text-align:center;">'+fiboCell+'</td><td style="font-size:10px;color:var(--text-secondary);max-width:80px;overflow:hidden;text-overflow:ellipsis;" title="'+t.note+'">'+t.note+'</td><td>'+imgCell+'</td><td style="white-space:nowrap;"><button class="btn-del" onclick="editTr('+i+')" title="แก้ไข" style="color:var(--accent);margin-right:2px;">✎</button><button class="btn-del" onclick="moveTrDate('+i+')" title="ย้ายไปวันอื่น" style="color:var(--amber);margin-right:2px;">📅</button><button class="btn-del" onclick="delTr('+i+')">✕</button></td></tr>';
   }).join('');
 }
 function delTr(i){if(_isReadOnly){showToast('🔒 โหมดดูเท่านั้น — ไม่สามารถแก้ไขได้','error');return;}
@@ -4824,6 +4837,7 @@ function editTr(i){if(_isReadOnly){showToast('🔒 โหมดดูเท่�
   document.getElementById('oTrend').value=t.trend||'';
   document.getElementById('oZone').value=t.zone||'';
   document.getElementById('oConfirm').value=t.confirm||'';
+  var oFiboEl=document.getElementById('oFibo');if(oFiboEl)oFiboEl.value=t.fibo||'';
   // restore session tags
   document.querySelectorAll('#oSessionTagRow .tag').forEach(function(el){el.classList.remove('active');});
   restoreOrderSessions(t.sessions||'');
@@ -5731,7 +5745,7 @@ function exportTrades(mode){
       'MaxRR','Result',
       'EntryDateTime','CloseDateTime','TimeInPos','SetupDuration',
       'Session','SetupClass','Candle','Code','Mode','Timeframe',
-      'Trend','ZoneMit','Zone','Confirm',
+      'Trend','ZoneMit','Zone','Confirm','FiboLevel',
       'Emotion','Discipline','Note','ImageLink','UpdatedAt'];
     var mapped=rows.map(function(t){
       return [t.id||t._id, t.date, t.day, t.portfolio||'data',
@@ -5741,7 +5755,7 @@ function exportTrades(mode){
         t.maxRR, t.result,
         t.entryDate||t.date, t.closeDate||'', t.timeInPos||'', t.setupDuration||'',
         t.session||t.sessions||'', t.setupClass, t.candle, t.code, t.mode, t.tf,
-        t.trend||'', t.zoneMit||'', t.zone||'', t.confirm||'',
+        t.trend||'', t.zoneMit||'', t.zone||'', t.confirm||'', t.fibo||'',
         t.emo||t.emotion, t.disc||t.discipline, t.note, t.imgLink, t.updatedAt||''];
     });
     var cnt=_csvDownload(headers, mapped, 'data-trades-'+dk(new Date())+'.csv');
@@ -5754,7 +5768,7 @@ function exportTrades(mode){
       'MaxRR','Result',
       'EntryDateTime','CloseDateTime','TimeInPos','SetupDuration',
       'Session','SetupClass','Candle','Code','Mode','Timeframe',
-      'Trend','ZoneMit','Zone','Confirm',
+      'Trend','ZoneMit','Zone','Confirm','FiboLevel',
       'Emotion','Discipline','Note','ImageLink'];
     var mapped=[];
     Object.keys(S.trades).sort().forEach(function(k){
@@ -5767,7 +5781,7 @@ function exportTrades(mode){
           t.maxRR, t.result,
           t.entryDate||k, t.closeDate||'', t.timeInPos||'', t.setupDuration||'',
           t.sessions||t.session||'', t.setupClass, t.candle, t.code, t.mode, t.tf,
-          t.trend||'', t.zoneMit||t.zone||'', t.zone||'', t.confirm,
+          t.trend||'', t.zoneMit||t.zone||'', t.zone||'', t.confirm, t.fibo||'',
           t.emotion, t.discipline, t.note, t.imgLink]);
       });
     });
@@ -7888,7 +7902,7 @@ function dtOpenAdd(){
   // Reset all fields
   var ids=['dtEntry','dtTP','dtSL2','dtRisk','dtLots','dtPnl','dtMaxRR','dtNote','dtImgLink','dtTimePos','dtSetupDur','dtFees','dtComm'];
   ids.forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
-  ['dtAsset','dtResult','dtSetupClass','dtCandle','dtCode','dtMode','dtTF','dtMitZone','dtZone','dtConfirm','dtContractSize','dtTrend'].forEach(function(id){
+  ['dtAsset','dtResult','dtSetupClass','dtCandle','dtCode','dtMode','dtTF','dtMitZone','dtZone','dtConfirm','dtContractSize','dtTrend','dtFibo'].forEach(function(id){
     var el=document.getElementById(id);if(el)el.selectedIndex=0;
   });
   // Set today's date
@@ -7948,7 +7962,7 @@ function dtOpenEdit(visIdx){
   var ss=function(id,v){var el=document.getElementById(id);if(el){for(var i=0;i<el.options.length;i++){if(el.options[i].value===v){el.selectedIndex=i;break;}}}};
   ss('dtAsset',t.asset);ss('dtResult',t.result);ss('dtSetupClass',t.setupClass);
   ss('dtCandle',t.candle);ss('dtCode',t.code);ss('dtMode',t.mode);ss('dtTF',t.tf);
-  ss('dtMitZone',t.zoneMit);ss('dtZone',t.zone);ss('dtConfirm',t.confirm);ss('dtTrend',t.trend||'');
+  ss('dtMitZone',t.zoneMit);ss('dtZone',t.zone);ss('dtConfirm',t.confirm);ss('dtTrend',t.trend||'');ss('dtFibo',t.fibo||'');
   sv('dtFees',t.fees||'0');sv('dtComm',t.commission||'0');
   dtSetSide(t.side||'Long');
   DT.emo=t.emo||5;DT.disc=t.disc||5;
@@ -7980,7 +7994,7 @@ function dtSaveTrade(){
     entryTime:timeOnly,duration:'',setupDuration:document.getElementById('dtSetupDur')?document.getElementById('dtSetupDur').value.trim():'',
     mode:gs('dtMode'),code:gs('dtCode'),tf:gs('dtTF'),
     setupClass:gs('dtSetupClass'),candle:gs('dtCandle'),
-    zoneMit:gs('dtMitZone'),zone:gs('dtZone'),confirm:gs('dtConfirm'),
+    zoneMit:gs('dtMitZone'),zone:gs('dtZone'),confirm:gs('dtConfirm'),fibo:gs('dtFibo'),
     entry:gv('dtEntry'),tp:gv('dtTP'),sl:gv('dtSL2'),
     risk:gv('dtRisk'),lots:gv('dtLots'),pnl:gv('dtPnl'),
     fees:gv('dtFees')||'0',commission:gv('dtComm')||'0',
@@ -8014,6 +8028,8 @@ function dtSaveTrade(){
     ['🎓 Class / TF',(t.setupClass||'-')+' / '+(t.tf||'-')],
     ['🧠 วินัย',t.disc+'/10'],
   ];
+  if(t.zone||t.confirm) rows.push(['📦 Zone / Confirm',(t.zone||'-')+' / '+(t.confirm||'-')]);
+  if(t.fibo) rows.push(['📐 Fibo Level','<b style="color:var(--teal);">'+t.fibo+'</b>']);
   if(t.note) rows.push(['📝 Note',t.note]);
   var body=document.getElementById('tradeConfirmBody');
   if(body) body.innerHTML='<div style="background:var(--bg-input);border:1px solid var(--border);border-radius:8px;overflow:hidden;">'
@@ -8061,7 +8077,7 @@ function dtToggleFilter(){
 function dtUpdateFilterBadge(){
   var badge=document.getElementById('dtFilterActiveBadge');if(!badge)return;
   var count=0;
-  ['dtfAsset','dtfResult','dtfDay','dtfSession','dtfCode','dtfMode','dtfClass','dtfModel','dtfEntryTime'].forEach(function(id){
+  ['dtfAsset','dtfResult','dtfDay','dtfSession','dtfCode','dtfMode','dtfClass','dtfModel','dtfEntryTime','dtfFibo'].forEach(function(id){
     var el=document.getElementById(id);if(el&&el.value)count++;
   });
   var dur=document.getElementById('dtfDur');if(dur&&dur.value)count++;
@@ -8168,6 +8184,7 @@ function dtParseSheetData(raw){
     zone:     hIdx(['zone']),
     mitZone:  hIdx(['mitzone','mitigatedzone','zonemitigated']),
     confirm:  hIdx(['confirm','confirmation']),
+    fibo:     hIdx(['fibolevel','fibo','fibonacci']),
     entry:    hIdx(['entry','entryprice']),
     tp:       hIdx(['tp','target','takeprofit']),
     sl:       hIdx(['sl','stoploss','stop']),
@@ -8291,6 +8308,7 @@ function dtParseSheetData(raw){
       candle:g(row,'candle'),
       zone:g(row,'zone'),
       confirm:g(row,'confirm'),
+      fibo:g(row,'fibo'),
       tf:g(row,'tf'),
       entry:entry,
       tp:g(row,'tp'),
@@ -8353,6 +8371,7 @@ function dtFiltered(){
   var fMode=gv('dtfMode');
   var fClass=gv('dtfClass');
   var fModel=gv('dtfModel');
+  var fFibo=gv('dtfFibo');
   var fDur=parseFloat(gv('dtfDur'))||0;
   var fEntryTime=gv('dtfEntryTime'); // เช่น "06:01-09:00"
   var src=[];
@@ -8406,6 +8425,7 @@ function dtFiltered(){
     if(fMode&&(t.mode||'')!==fMode) return false;
     if(fClass&&(t.setupClass||'')!==fClass) return false;
     if(fModel&&(t.model||'')!==fModel) return false;
+    if(fFibo&&(t.fibo||'')!==fFibo) return false;
     if(fDur){
       var durStr=t.duration||'';
       var m=0;
@@ -8568,6 +8588,13 @@ function dtRender(){
       +'<td style="padding:6px;font-size:10px;">'+(t.candle||'-')+'</td>'
       +'<td style="padding:6px;font-size:10px;">'+(t.zone||'-')+'</td>'
       +'<td style="padding:6px;font-size:10px;">'+(t.confirm||'-')+'</td>'
+      +(function(){
+        var fc={'200':'var(--teal)','400':'var(--purple)','600':'var(--green)','800':'var(--amber)'};
+        var fv=t.fibo||'';
+        return fv
+          ?'<td style="padding:6px;font-size:10px;font-weight:700;color:'+(fc[fv]||'var(--accent)')+';">'+fv+'</td>'
+          :'<td style="padding:6px;font-size:10px;color:var(--text-muted);">-</td>';
+      })()
       +'<td style="padding:6px;text-align:right;font-family:var(--font-mono);font-size:10px;">'+(t.entry||'-')+'</td>'
       +'<td style="padding:6px;text-align:right;font-family:var(--font-mono);font-size:10px;color:var(--green);">'+(t.tp||'-')+'</td>'
       +'<td style="padding:6px;text-align:right;font-family:var(--font-mono);font-size:10px;color:var(--red);">'+(t.sl||'-')+'</td>'
@@ -8675,7 +8702,7 @@ function dtUpdateFilterOpts(rows){
 function dtSaveFilters(resetPage){
   if(resetPage!==false) _dtPage=1;
   var state={};
-  ['dtfAsset','dtfResult','dtfDay','dtfSession','dtfCode','dtfMode','dtfClass','dtfModel','dtfDur','dtfEntryTime'].forEach(function(id){
+  ['dtfAsset','dtfResult','dtfDay','dtfSession','dtfCode','dtfMode','dtfClass','dtfModel','dtfDur','dtfEntryTime','dtfFibo'].forEach(function(id){
     var el=document.getElementById(id);if(el)state[id]=el.value;
   });
   localStorage.setItem('dt_filters',JSON.stringify(state));
@@ -8848,7 +8875,7 @@ function updatePortSelectorLabel(){
 
 
 function dtResetFilters(){
-  ['dtfAsset','dtfResult','dtfDay','dtfSession','dtfCode','dtfMode','dtfClass','dtfModel','dtfEntryTime'].forEach(function(id){
+  ['dtfAsset','dtfResult','dtfDay','dtfSession','dtfCode','dtfMode','dtfClass','dtfModel','dtfEntryTime','dtfFibo'].forEach(function(id){
     var el=document.getElementById(id);if(el)el.selectedIndex=0;
   });
   var dur=document.getElementById('dtfDur');if(dur)dur.value='';
@@ -9065,7 +9092,7 @@ function dtGetCardWidths(){
 }
 
 // ── Filter state persistence ──
-var _DT_FILTER_IDS=['dtfAsset','dtfResult','dtfDay','dtfSession','dtfCode','dtfMode','dtfClass','dtfModel','dtfDur','dtfEntryTime'];
+var _DT_FILTER_IDS=['dtfAsset','dtfResult','dtfDay','dtfSession','dtfCode','dtfMode','dtfClass','dtfModel','dtfDur','dtfEntryTime','dtfFibo'];
 function dtSaveFilterState(){
   var state={};
   _DT_FILTER_IDS.forEach(function(id){
@@ -9659,6 +9686,25 @@ function dtRenderCharts(rows){
     {key:'Class',     fn:function(){return groupBy('setupClass');},     title:'🏆 Class'},
     {key:'Candle',    fn:function(){return groupBy('candle');},         title:'🕯 Candle'},
     {key:'Confirm',   fn:function(){return groupBy('confirm');},        title:'✅ Confirm'},
+    {key:'FiboLevel', fn:function(){
+      // Sort fibo levels numerically
+      var g={};
+      rows.forEach(function(t){
+        var k=String(t.fibo||'').trim()||'-';
+        if(!g[k]) g[k]={pnl:0,count:0,wins:0};
+        g[k].pnl+=parseFloat(t.pnl)||0;
+        g[k].count++;
+        if(parseFloat(t.pnl)>0) g[k].wins++;
+      });
+      // Sort numerically (ignore '-')
+      var sorted={};
+      Object.keys(g).filter(function(k){return k!=='-';}).sort(function(a,b){return parseFloat(a)-parseFloat(b);}).forEach(function(k){sorted[k]=g[k];});
+      if(g['-']) sorted['-']=g['-'];
+      return sorted;
+    }, title:'📐 Fibo Level', colorFn:function(k){
+      var fiboCols={'200':'#22d3ee','400':'#a855f7','600':'#2ecc8a','800':'#f5a623'};
+      return fiboCols[k]||'#4f7aff';
+    }},
     {key:'SetupDur',  fn:function(){
       // Parse setupDuration string to total minutes
       function parseMins(v){
@@ -10233,6 +10279,12 @@ if(document.readyState==='loading'){
               <select class="form-input" id="dtConfirm"><option value="">Select</option><option>M1</option><option>M5</option><option>M15</option><option>BOS</option><option>CHoCH</option><option>SMC</option></select>
             </div>
           </div>
+          <div class="fg2" style="margin-bottom:8px;">
+            <div>
+              <div class="field-label" style="display:flex;justify-content:space-between;align-items:center;">Fibo Level <button onclick="openDropEdit('dtFibo','Fibo Level')" style="font-size:9px;background:none;border:none;color:var(--accent);cursor:pointer;padding:0;">✎ Edit</button></div>
+              <select class="form-input" id="dtFibo"><option value="">— Select</option><option>200</option><option>400</option><option>600</option><option>800</option></select>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -10483,7 +10535,7 @@ var UNIFIED_HEADER2=[
   'MaxRR','Result',
   'EntryDateTime','CloseDateTime','TimeInPos','SetupDuration',
   'Session','SetupClass','Candle','Code','Mode','Timeframe',
-  'Trend','ZoneMit','Zone','Confirm',
+  'Trend','ZoneMit','Zone','Confirm','FiboLevel',
   'Emotion','Discipline',
   'Note','ImageLink','UpdatedAt'
 ];
@@ -10604,7 +10656,7 @@ function saveTrade(d){
     d.maxRR||'', d.result||'',
     d.entryDate||d.date||'', d.closeDate||'', d.timeInPos||'', d.setupDuration||'',
     d.sessions||d.session||'', d.setupClass||'', d.candle||'', d.code||'', d.mode||'', d.tf||'',
-    d.trend||'', d.zoneMit||'', d.zone||'', d.confirm||'',
+    d.trend||'', d.zoneMit||'', d.zone||'', d.confirm||'', d.fibo||'',
     d.emotion||'', d.discipline||'',
     d.note||'', d.imgLink||'', ts
   ];
@@ -10655,7 +10707,7 @@ function saveDataTrade(d){
     d.entryDate||d.entryDateTime||d.date||'', d.closeDate||d.closeDateTime||'',
     d.timeInPos||'', d.setupDuration||'',
     d.session||d.sessions||'', d.setupClass||'', d.candle||'', d.code||'', d.mode||'', d.tf||'',
-    d.trend||'', d.zoneMit||'', d.zone||'', d.confirm||'',
+    d.trend||'', d.zoneMit||'', d.zone||'', d.confirm||'', d.fibo||'',
     d.emo||d.emotion||'', d.disc!=null?d.disc:d.discipline||'',
     d.note||'', d.imgLink||'', ts
   ];
